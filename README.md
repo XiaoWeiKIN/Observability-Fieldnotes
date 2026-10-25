@@ -1,32 +1,63 @@
-# Observability Lab
+# Observability Fieldnotes
 
-A hands-on learning and research repository for modern observability, centered on **OpenTelemetry**, **Datadog**, and adjacent technologies.
+A personal research notebook for understanding observability systems through source-backed research, architectural analysis, and reproducible experiments.
 
-## Goals
+The focus is on **OpenTelemetry**, **Datadog**, and the engineering systems around telemetry collection, processing, storage, analysis, and cost control. The goal is to build durable technical understanding—not just collect links or summarize documentation.
 
-- Build a strong mental model of traces, metrics, logs, profiles, context propagation, sampling, and telemetry pipelines.
-- Understand OpenTelemetry architecture: API/SDK, auto-instrumentation, OTLP, Collector, semantic conventions, and profiles.
-- Understand Datadog's native stack and its interoperability with OpenTelemetry.
-- Compare vendor-neutral and vendor-specific approaches with repeatable experiments.
-- Track frontier topics: eBPF/zero-code instrumentation, continuous profiling, GenAI/agent observability, cost/cardinality control, and telemetry governance.
-- Keep conclusions evidence-backed: every research note should link to source docs, experiments, or measurements.
+## Research approach
 
-## Mental model
+Research typically moves through this cycle:
 
 ```mermaid
 flowchart LR
-    A[Application / Runtime] --> B[Instrumentation]
-    B -->|OTel SDK / Auto-instrumentation| C[OTLP]
-    B -->|Datadog SDK / Agent| D[Datadog pipeline]
-    C --> E[OpenTelemetry Collector]
-    E --> F[Processors]
-    F --> G1[Datadog]
-    F --> G2[Prometheus / Mimir]
-    F --> G3[Tempo / Jaeger]
-    F --> G4[Loki / Other backends]
-    A --> H[eBPF / Zero-code]
+    A["Question"] --> B["Primary sources"]
+    B --> C["Architecture and trade-offs"]
+    C --> D["Experiment or measurement"]
+    D --> E["Findings and limitations"]
+    E --> F["Reusable notes"]
+    F -. "New questions" .-> A
+```
+
+- **Start with a question.** Make the problem or design decision explicit.
+- **Prefer primary evidence.** Use official specifications, source code, technical documentation, and measured results where available.
+- **Separate fact from interpretation.** Record assumptions, version-specific behavior, uncertainty, and limitations.
+- **Use experiments when useful.** Keep configurations and observations reproducible; screenshots alone are not evidence.
+- **Compare designs by trade-offs.** Explain operational impact, performance, correctness, complexity, and cost.
+
+## Scope
+
+| Research area | Topics |
+|---|---|
+| OpenTelemetry | API and SDK, auto-instrumentation, OTLP, Collector, semantic conventions, context propagation |
+| Distributed tracing | Span models, trace pipelines, sampling, service topology, trace-to-metric relationships |
+| Metrics and logs | Cardinality, aggregation, correlation, storage and query patterns |
+| Datadog interoperability | Datadog SDK and Agent, DDOT, upstream Collector, ingestion and retention behavior |
+| Telemetry economics | Volume, cost attribution, retention, sampling, cardinality control |
+| Instrumentation | eBPF, zero-code instrumentation, Kubernetes injection and coverage boundaries |
+| Continuous profiling | Profiles and their correlation with traces and other signals |
+| AI and agent observability | Workflow and tool spans, token and cost metrics, evaluation, failure analysis |
+| Governance | PII handling, tenancy, routing, schema evolution and policy enforcement |
+
+The scope can evolve as new questions emerge. Vendor-specific details should be labeled explicitly rather than presented as universal behavior.
+
+## System overview
+
+This diagram is a conceptual map of common telemetry paths, not a claim that every deployment uses every component.
+
+```mermaid
+flowchart LR
+    A["Application / Runtime"] --> B["Instrumentation"]
+    B -->|"OTel SDK / auto-instrumentation"| C["OTLP"]
+    B -->|"Datadog SDK / Agent"| D["Datadog pipeline"]
+    C --> E["OpenTelemetry Collector"]
+    E --> F["Processors and routing"]
+    F --> G1["Datadog"]
+    F --> G2["Prometheus / Mimir"]
+    F --> G3["Tempo / Jaeger"]
+    F --> G4["Loki / other backends"]
+    A --> H["eBPF / zero-code"]
     H --> E
-    A --> I[Continuous Profiling]
+    A --> I["Continuous profiling"]
     I --> G1
 ```
 
@@ -51,65 +82,60 @@ flowchart LR
 └── README.md
 ```
 
-## Learning path
+- `docs/` holds durable explanations, architecture notes, and comparisons.
+- `labs/` holds reproducible experiments and configurations.
+- `research/` holds research records and templates.
+
+## Suggested learning path
 
 ```mermaid
 flowchart TD
-    S1[Signals: traces / metrics / logs] --> S2[Context propagation + semantic conventions]
-    S2 --> S3[OTel SDK + auto-instrumentation]
-    S3 --> S4[OTLP + Collector pipelines]
-    S4 --> S5[Sampling / enrichment / filtering]
-    S5 --> S6[Datadog ingestion + correlation]
-    S6 --> S7[Cost, cardinality, governance]
-    S7 --> S8[eBPF + zero-code]
-    S8 --> S9[Profiles + continuous profiling]
-    S9 --> S10[GenAI / Agent observability]
+    A["Signals and telemetry data model"] --> B["Context propagation and semantic conventions"]
+    B --> C["SDKs and auto-instrumentation"]
+    C --> D["OTLP and Collector pipelines"]
+    D --> E["Sampling, enrichment, and routing"]
+    E --> F["Backend ingestion and correlation"]
+    F --> G["Cardinality, retention, and cost"]
+    G --> H["eBPF and zero-code coverage"]
+    H --> I["Continuous profiling"]
+    I --> J["AI agent observability"]
 ```
 
-## Current research tracks
-
-| Track | Questions |
-|---|---|
-| OpenTelemetry fundamentals | What belongs in API, SDK, Collector, OTLP, and semantic conventions? |
-| Collector architecture | How should receivers, processors, connectors, exporters, and extensions be composed? |
-| Sampling | Head vs tail sampling; accuracy, cost, memory, and failure modes |
-| Datadog + OTel | Native Datadog SDK vs OTel SDK; Agent vs DDOT vs upstream Collector |
-| Telemetry economics | Cardinality, ingestion volume, retention, sampling, aggregation |
-| eBPF | What can be observed without source changes? What context is lost? |
-| Profiling | How profiles correlate with traces and other signals |
-| GenAI observability | Agent/workflow/tool spans, token/cost/error metrics, evaluations |
-| Kubernetes | Operator, auto-instrumentation injection, Collector deployment patterns |
-| Governance | PII redaction, tenancy, routing, schema/version control |
+Use this as a map, not a mandatory sequence. Follow the research question that has the clearest learning value.
 
 ## Working conventions
 
-1. One research question = one Issue.
-2. Every experiment records environment, versions, config, hypothesis, observations, and limitations.
-3. Prefer reproducible labs over screenshots.
-4. Separate facts from interpretation.
-5. Record vendor-specific behavior explicitly.
-6. Never commit API keys or tokens.
+1. One focused research question per Issue.
+2. For each experiment, record the environment, versions, configuration, hypothesis, observations, and limitations.
+3. Cite the primary source for specifications and product behavior; include access dates when behavior may change.
+4. Distinguish documented facts, measured results, and personal interpretation.
+5. State the scope of conclusions, especially where results depend on versions or vendors.
+6. Never commit API keys, tokens, or other secrets.
 
 ## References
 
 ### OpenTelemetry
-- https://opentelemetry.io/docs/
-- https://opentelemetry.io/docs/specs/otel/
-- https://opentelemetry.io/docs/specs/otlp/
-- https://opentelemetry.io/docs/collector/
-- https://opentelemetry.io/docs/zero-code/
+- [Documentation](https://opentelemetry.io/docs/)
+- [Specification](https://opentelemetry.io/docs/specs/otel/)
+- [OTLP specification](https://opentelemetry.io/docs/specs/otlp/)
+- [Collector documentation](https://opentelemetry.io/docs/collector/)
+- [Zero-code instrumentation](https://opentelemetry.io/docs/zero-code/)
 
 ### Datadog
-- https://docs.datadoghq.com/opentelemetry/
-- https://docs.datadoghq.com/opentelemetry/getting_started/
-- https://docs.datadoghq.com/opentelemetry/setup/ddot_collector/
-- https://docs.datadoghq.com/llm_observability/
+- [OpenTelemetry integration](https://docs.datadoghq.com/opentelemetry/)
+- [OpenTelemetry getting started](https://docs.datadoghq.com/opentelemetry/getting_started/)
+- [Datadog Distribution of the OpenTelemetry Collector](https://docs.datadoghq.com/opentelemetry/setup/ddot_collector/)
+- [LLM Observability](https://docs.datadoghq.com/llm_observability/)
 
-## Suggested first 6 issues
+## Initial research questions
 
-- [ ] Build a minimal OTLP traces/metrics/logs pipeline with the OpenTelemetry Collector
-- [ ] Compare OTel SDK → upstream Collector → Datadog vs Datadog SDK → Agent/DDOT
-- [ ] Evaluate head sampling vs tail sampling under error-heavy traffic
-- [ ] Measure high-cardinality metric impact and mitigation techniques
-- [ ] Prototype eBPF/zero-code instrumentation and document coverage gaps
-- [ ] Trace a small LLM/agent workflow using OpenTelemetry GenAI semantics and Datadog
+- [ ] Build a minimal OTLP traces, metrics, and logs pipeline with the OpenTelemetry Collector.
+- [ ] Compare OTel SDK → upstream Collector → Datadog with Datadog SDK → Agent/DDOT.
+- [ ] Evaluate head sampling and tail sampling under error-heavy traffic.
+- [ ] Measure high-cardinality metric impact and mitigation techniques.
+- [ ] Prototype eBPF or zero-code instrumentation and document coverage gaps.
+- [ ] Trace a small LLM/agent workflow using OpenTelemetry GenAI conventions and Datadog.
+
+---
+
+**Observability Fieldnotes** is a personal learning and research repository. Findings should be treated as scoped to their cited sources, tested versions, and recorded assumptions.

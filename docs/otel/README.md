@@ -25,6 +25,9 @@
 - Kubernetes Operator injection
 
 ### Collector
+
+- [Collector 部署架构：OTel 官方模式与 Splunk 实践](collector-deployment.md) — Agent / Gateway / Agent-to-Gateway、Kubernetes、扩容与 Kafka
+
 ```mermaid
 flowchart LR
     R[Receivers] --> P[Processors]

@@ -1,67 +1,67 @@
 # Observability Fieldnotes
 
-A personal research notebook for understanding observability systems through source-backed research, architectural analysis, and reproducible experiments.
+一个用于个人学习与技术研究的可观测性笔记库，通过**原始资料、架构分析和可复现实验**，持续理解可观测性系统的设计与实现。
 
-The focus is on **OpenTelemetry**, **Datadog**, and the engineering systems around telemetry collection, processing, storage, analysis, and cost control. The goal is to build durable technical understanding—not just collect links or summarize documentation.
+研究重点包括 **OpenTelemetry、Datadog**，以及遥测数据的采集、处理、存储、分析和成本控制。目标是形成可复用、可追溯的技术理解，而不只是收集链接或转述文档。
 
-## Research approach
+## 研究方法
 
-Research typically moves through this cycle:
+研究通常沿着以下过程推进：
 
 ```mermaid
 flowchart LR
-    A["Question"] --> B["Primary sources"]
-    B --> C["Architecture and trade-offs"]
-    C --> D["Experiment or measurement"]
-    D --> E["Findings and limitations"]
-    E --> F["Reusable notes"]
-    F -. "New questions" .-> A
+    A["研究问题"] --> B["原始资料"]
+    B --> C["架构与权衡"]
+    C --> D["实验或测量"]
+    D --> E["结论与局限"]
+    E --> F["可复用的知识笔记"]
+    F -. "产生新问题" .-> A
 ```
 
-- **Start with a question.** Make the problem or design decision explicit.
-- **Prefer primary evidence.** Use official specifications, source code, technical documentation, and measured results where available.
-- **Separate fact from interpretation.** Record assumptions, version-specific behavior, uncertainty, and limitations.
-- **Use experiments when useful.** Keep configurations and observations reproducible; screenshots alone are not evidence.
-- **Compare designs by trade-offs.** Explain operational impact, performance, correctness, complexity, and cost.
+- **从明确的问题开始。** 说明要理解的机制，或需要做出的工程决策。
+- **优先使用一手证据。** 尽可能参考官方规范、源代码、技术文档和实际测量结果。
+- **区分事实与解释。** 记录假设、版本差异、不确定性和结论边界。
+- **在适合的场景中做实验。** 保留可复现的配置和观测结果；截图本身不能替代证据。
+- **通过权衡比较设计。** 分析运维影响、性能、正确性、复杂度和成本。
 
-## Scope
+## 研究范围
 
-| Research area | Topics |
+| 研究方向 | 关注内容 |
 |---|---|
-| OpenTelemetry | API and SDK, auto-instrumentation, OTLP, Collector, semantic conventions, context propagation |
-| Distributed tracing | Span models, trace pipelines, sampling, service topology, trace-to-metric relationships |
-| Metrics and logs | Cardinality, aggregation, correlation, storage and query patterns |
-| Datadog interoperability | Datadog SDK and Agent, DDOT, upstream Collector, ingestion and retention behavior |
-| Telemetry economics | Volume, cost attribution, retention, sampling, cardinality control |
-| Instrumentation | eBPF, zero-code instrumentation, Kubernetes injection and coverage boundaries |
-| Continuous profiling | Profiles and their correlation with traces and other signals |
-| AI and agent observability | Workflow and tool spans, token and cost metrics, evaluation, failure analysis |
-| Governance | PII handling, tenancy, routing, schema evolution and policy enforcement |
+| OpenTelemetry | API 与 SDK、自动埋点、OTLP、Collector、语义约定、上下文传播 |
+| 分布式追踪 | Span 模型、Trace Pipeline、采样、服务拓扑、Trace 与指标的关联 |
+| 指标与日志 | 基数、聚合、关联分析、存储与查询模式 |
+| Datadog 与 OTel 互操作 | Datadog SDK 与 Agent、DDOT、上游 Collector、数据摄取与保留行为 |
+| 遥测经济性 | 数据量、成本归因、保留策略、采样、基数控制 |
+| 埋点与采集 | eBPF、零代码埋点、Kubernetes 注入及覆盖边界 |
+| 持续性能剖析 | Profile，以及它与 Trace 和其他信号的关联 |
+| AI 与 Agent 可观测性 | 工作流和工具 Span、Token 与成本指标、评估、故障分析 |
+| 数据治理 | PII 处理、多租户、路由、Schema 演进与策略控制 |
 
-The scope can evolve as new questions emerge. Vendor-specific details should be labeled explicitly rather than presented as universal behavior.
+研究范围会随着问题演进。厂商特有的行为应明确标注，不能直接当作通用规律。
 
-## System overview
+## 系统概览
 
-This diagram is a conceptual map of common telemetry paths, not a claim that every deployment uses every component.
+下图用于说明常见遥测链路，不代表每种部署都包含图中的全部组件。
 
 ```mermaid
 flowchart LR
-    A["Application / Runtime"] --> B["Instrumentation"]
-    B -->|"OTel SDK / auto-instrumentation"| C["OTLP"]
-    B -->|"Datadog SDK / Agent"| D["Datadog pipeline"]
+    A["应用 / 运行时"] --> B["埋点与采集"]
+    B -->|"OTel SDK / 自动埋点"| C["OTLP"]
+    B -->|"Datadog SDK / Agent"| D["Datadog 管道"]
     C --> E["OpenTelemetry Collector"]
-    E --> F["Processors and routing"]
+    E --> F["处理与路由"]
     F --> G1["Datadog"]
     F --> G2["Prometheus / Mimir"]
     F --> G3["Tempo / Jaeger"]
-    F --> G4["Loki / other backends"]
-    A --> H["eBPF / zero-code"]
+    F --> G4["Loki / 其他后端"]
+    A --> H["eBPF / 零代码采集"]
     H --> E
-    A --> I["Continuous profiling"]
+    A --> I["持续性能剖析"]
     I --> G1
 ```
 
-## Repository structure
+## 仓库结构
 
 ```text
 .
@@ -82,60 +82,62 @@ flowchart LR
 └── README.md
 ```
 
-- `docs/` holds durable explanations, architecture notes, and comparisons.
-- `labs/` holds reproducible experiments and configurations.
-- `research/` holds research records and templates.
+- `docs/`：沉淀可长期复用的技术说明、架构分析和方案对比。
+- `labs/`：保存可复现的实验、配置和测量过程。
+- `research/`：保存研究记录与模板。
 
-## Suggested learning path
+## 建议学习路径
 
 ```mermaid
 flowchart TD
-    A["Signals and telemetry data model"] --> B["Context propagation and semantic conventions"]
-    B --> C["SDKs and auto-instrumentation"]
-    C --> D["OTLP and Collector pipelines"]
-    D --> E["Sampling, enrichment, and routing"]
-    E --> F["Backend ingestion and correlation"]
-    F --> G["Cardinality, retention, and cost"]
-    G --> H["eBPF and zero-code coverage"]
-    H --> I["Continuous profiling"]
-    I --> J["AI agent observability"]
+    A["信号类型与遥测数据模型"] --> B["上下文传播与语义约定"]
+    B --> C["SDK 与自动埋点"]
+    C --> D["OTLP 与 Collector 管道"]
+    D --> E["采样、增强与路由"]
+    E --> F["后端摄取与关联分析"]
+    F --> G["基数、保留策略与成本"]
+    G --> H["eBPF 与零代码采集边界"]
+    H --> I["持续性能剖析"]
+    I --> J["AI Agent 可观测性"]
 ```
 
-Use this as a map, not a mandatory sequence. Follow the research question that has the clearest learning value.
+这是一张知识地图，不是必须按顺序完成的课程。优先研究最有学习价值的问题即可。
 
-## Working conventions
+## 研究约定
 
-1. One focused research question per Issue.
-2. For each experiment, record the environment, versions, configuration, hypothesis, observations, and limitations.
-3. Cite the primary source for specifications and product behavior; include access dates when behavior may change.
-4. Distinguish documented facts, measured results, and personal interpretation.
-5. State the scope of conclusions, especially where results depend on versions or vendors.
-6. Never commit API keys, tokens, or other secrets.
+1. 每个 Issue 聚焦一个明确的研究问题。
+2. 每次实验记录环境、版本、配置、假设、观测结果和局限。
+3. 规范与产品行为应引用原始资料；对可能变化的行为，记录查阅日期。
+4. 明确区分文档事实、实测结果和个人判断。
+5. 标注结论的适用范围，尤其是依赖特定版本或厂商实现的结论。
+6. 不提交 API Key、Token 或其他敏感凭据。
 
-## References
+## 参考资料
 
 ### OpenTelemetry
-- [Documentation](https://opentelemetry.io/docs/)
-- [Specification](https://opentelemetry.io/docs/specs/otel/)
-- [OTLP specification](https://opentelemetry.io/docs/specs/otlp/)
-- [Collector documentation](https://opentelemetry.io/docs/collector/)
-- [Zero-code instrumentation](https://opentelemetry.io/docs/zero-code/)
+
+- [官方文档](https://opentelemetry.io/docs/)
+- [规范](https://opentelemetry.io/docs/specs/otel/)
+- [OTLP 规范](https://opentelemetry.io/docs/specs/otlp/)
+- [Collector 文档](https://opentelemetry.io/docs/collector/)
+- [零代码埋点](https://opentelemetry.io/docs/zero-code/)
 
 ### Datadog
-- [OpenTelemetry integration](https://docs.datadoghq.com/opentelemetry/)
-- [OpenTelemetry getting started](https://docs.datadoghq.com/opentelemetry/getting_started/)
-- [Datadog Distribution of the OpenTelemetry Collector](https://docs.datadoghq.com/opentelemetry/setup/ddot_collector/)
+
+- [OpenTelemetry 集成](https://docs.datadoghq.com/opentelemetry/)
+- [OpenTelemetry 入门](https://docs.datadoghq.com/opentelemetry/getting_started/)
+- [Datadog 发行版 OpenTelemetry Collector（DDOT）](https://docs.datadoghq.com/opentelemetry/setup/ddot_collector/)
 - [LLM Observability](https://docs.datadoghq.com/llm_observability/)
 
-## Initial research questions
+## 初始研究问题
 
-- [ ] Build a minimal OTLP traces, metrics, and logs pipeline with the OpenTelemetry Collector.
-- [ ] Compare OTel SDK → upstream Collector → Datadog with Datadog SDK → Agent/DDOT.
-- [ ] Evaluate head sampling and tail sampling under error-heavy traffic.
-- [ ] Measure high-cardinality metric impact and mitigation techniques.
-- [ ] Prototype eBPF or zero-code instrumentation and document coverage gaps.
-- [ ] Trace a small LLM/agent workflow using OpenTelemetry GenAI conventions and Datadog.
+- [ ] 使用 OpenTelemetry Collector 搭建最小化的 OTLP Trace、Metrics、Logs 管道。
+- [ ] 对比 OTel SDK → 上游 Collector → Datadog 与 Datadog SDK → Agent/DDOT。
+- [ ] 在错误密集的流量场景下评估头部采样与尾部采样。
+- [ ] 测量高基数指标的影响及其治理方法。
+- [ ] 验证 eBPF 或零代码埋点，并记录其覆盖范围和盲区。
+- [ ] 使用 OpenTelemetry GenAI 语义约定和 Datadog 跟踪一个小型 LLM/Agent 工作流。
 
 ---
 
-**Observability Fieldnotes** is a personal learning and research repository. Findings should be treated as scoped to their cited sources, tested versions, and recorded assumptions.
+**Observability Fieldnotes** 是一个个人学习与技术研究仓库。所有结论都应结合引用来源、测试版本和记录的假设理解。

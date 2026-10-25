@@ -29,3 +29,7 @@ This is not a winner/loser comparison. OpenTelemetry is primarily an open observ
 5. Capture generated span/metric/log volume.
 6. Compare data loss and correlation behavior during failure.
 7. Record feature gaps without generalizing beyond the tested setup.
+
+## Related architecture research
+
+- [Datadog Agent vs OpenTelemetry Collector Agent (DaemonSet)](datadog-agent-vs-otel-collector-daemonset.md) — Chinese analysis of Kubernetes deployment roles, Trace Agent processing, Cluster Agent responsibilities, and Collector alternatives.

@@ -316,3 +316,9 @@ service:
 - [Splunk：Gateway routing / Advanced Configuration](https://github.com/signalfx/splunk-otel-collector-chart/blob/main/docs/advanced-configuration.md#gateway-routing)
 - [Splunk：Gateway-only example](https://github.com/signalfx/splunk-otel-collector-chart/blob/main/examples/collector-gateway-only/collector-gateway-only-values.yaml)
 - [OTel Collector Contrib：Kafka Exporter](https://github.com/open-telemetry/opentelemetry-collector-contrib/blob/main/exporter/kafkaexporter/README.md)
+
+## 延伸对比：Datadog Node Agent
+
+Datadog Agent 在 Kubernetes 中默认由 DaemonSet 部署，**部署位置和基础采集角色与 Collector Agent 模式类似**。不过 Datadog Trace Agent 还实现了独立的采样、处理、APM Stats 聚合以及平台特有的数据出口；Datadog Cluster Agent 也不能直接等同于 Splunk Cluster Receiver。
+
+详见：[Datadog Agent 与 OpenTelemetry Collector Agent（DaemonSet）部署架构对比](../comparisons/datadog-agent-vs-otel-collector-daemonset.md)。

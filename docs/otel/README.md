@@ -27,6 +27,7 @@
 ### Collector
 
 - [Collector 部署架构：OTel 官方模式与 Splunk 实践](collector-deployment.md) — Agent / Gateway / Agent-to-Gateway、Kubernetes、扩容与 Kafka
+- [Datadog Agent 与 OTel Collector DaemonSet 部署对比](../comparisons/datadog-agent-vs-otel-collector-daemonset.md) — Node Agent、Trace Pipeline、Cluster Agent、Spanloom 选型
 
 ```mermaid
 flowchart LR
